@@ -8,15 +8,27 @@ function App() {
   const [isLoading, setLoading] = useState(false);
   const [errorVal, setError] = useState("");
   const [results, setResults] = useState([]);
+  const [favs, setFavs] = useState([]);
 
-  async function handleKeyPress(e) {
+  async function handleKeyPress(e) { 
     if(e.key === "Enter") {
       e.preventDefault();
       await setResults([]);
 
       await setError("");
       await setLoading(true);
-      await setTimeout(() => search().catch(e => e.message), 500)
+      await search().catch(e => e.message);
+    }
+  }
+
+  function handleFavToggle(npmPackage) {
+    const favIndex = favs.findIndex(elm => elm.name === npmPackage.name);
+    if(favIndex === -1) {
+      npmPackage.isFavorited = true;
+      setFavs(favs.concat(npmPackage));
+    } else {
+      favs.splice(favIndex, 1);
+      setFavs(favs);
     }
   }
 
@@ -33,7 +45,11 @@ function App() {
     if(!response.ok) {
       throw new Error("Search failed, please try again");
     }
-    const packages = await response.json();
+    const rawPackages = await response.json();
+    const packages = rawPackages.map(elm => {
+      elm.isFavorited = false;
+      return elm;
+    });
     await setResults([].concat(packages));
     await setLoading(false);
   }
@@ -71,7 +87,7 @@ function App() {
         { !!results.length &&
           <div className="packages">
             {results.map((elm, i) => (
-                <Package key={i} elm={elm} />
+                <Package key={i} elm={elm} toggleFav={handleFavToggle} />
             ))}
           </div>
         }

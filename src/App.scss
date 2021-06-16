@@ -95,13 +95,18 @@ header {
 .package {
   border-radius: 15px;
   padding: 1rem 0.5rem;
+  display: grid;
+  grid-template-columns: 90% 10%;
+  grid-template-rows: 1fr 1fr;
 
   &:hover {
     background-color: #eefeff;
   }
 
   .main-data {
-    margin: 0 0 1rem 0;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    // margin: 0 0 1rem 0; 
 
     a {
       &:hover {
@@ -123,8 +128,26 @@ header {
   }
   
   p {
-    margin: 0 1rem;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    margin: 0.5rem 1rem;
     color: gray;
+  }
+
+  .star {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    place-self: center;
+    font-size: 2rem;
+    font-weight: 100;
+
+    &.fav {
+      color: gold;
+    }
+
+    &:hover {
+      font-weight: 200;
+    }
   }
 }
 
